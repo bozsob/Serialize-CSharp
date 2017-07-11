@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 namespace Serialize_practice
 {
@@ -21,6 +22,25 @@ namespace Serialize_practice
             fs.Close();
         }
 
+        private static Person Deserialize()
+        {
+            Person personDeserialized = new Person();
+
+            // Open file to read the data from
+            FileStream fs = new FileStream("Person.dat", FileMode.Open);
+
+            // Create a BinaryFormatter object to perform the deserialization 
+            BinaryFormatter bFormatter = new BinaryFormatter();
+
+            // Use the BinaryFormatter object to deserialize the data from the file 
+            personDeserialized = (Person) bFormatter.Deserialize(fs);
+
+            // Close the file 
+            fs.Close();
+
+            return personDeserialized;
+        }
+
         static void Main(string[] args)
         {
             /*
@@ -34,10 +54,13 @@ namespace Serialize_practice
             fs.Close();
             */
 
+            // serialize a Person object
             Person person = new Person("Tony", new DateTime(1923, 4, 22));
             Serialize(person);
-            Console.WriteLine("File created.");
-            Console.ReadKey();
+            Debug.WriteLine("File created.");
+
+            // deserialize a Person object
+            Debug.WriteLine(Deserialize());            
         }
     }
 }
