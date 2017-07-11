@@ -13,7 +13,6 @@ namespace Serialize_practice
         private DateTime birthDate;
         public enum Genders { Male, Female };
 
-        // constructors
         public Person() { }
 
         public Person(string name, DateTime birthDate)
@@ -22,7 +21,6 @@ namespace Serialize_practice
             this.birthDate = birthDate;
         }
 
-        // Properties
         public string Name
         {
             get { return name; }
