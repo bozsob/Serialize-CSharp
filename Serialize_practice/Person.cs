@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace Serialize_practice
 {
     [Serializable]
-    public class Person : IDeserializationCallback
+    public class Person : ISerializable, IDeserializationCallback
     {
         private string name;
         private DateTime birthDate;
@@ -21,6 +21,19 @@ namespace Serialize_practice
         {
             this.name = name;
             this.birthDate = birthDate;
+        }
+
+        // serialization constructor
+        public Person(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new System.ArgumentNullException("info missing");
+            }
+
+            name =  info.GetString("Name");
+            birthDate = info.GetDateTime("BirthDate");
+            CalculateAge(this);
         }
 
         public string Name
@@ -42,12 +55,6 @@ namespace Serialize_practice
                 this.name, this.birthDate, CalculateAge(this));
         }
 
-        void IDeserializationCallback.OnDeserialization(Object sender)
-        {
-            // after deserialization calculate age by the actual date
-            CalculateAge(this);
-        }
-
         static int CalculateAge(Person p)
         {
             int age = DateTime.Now.Year - p.birthDate.Year;
@@ -57,6 +64,22 @@ namespace Serialize_practice
                 age = age -1;
 
             return age;
+        }
+
+        void IDeserializationCallback.OnDeserialization(Object sender)
+        {
+            // after deserialization calculate age by the actual date
+            CalculateAge(this);
+        }
+
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new System.ArgumentNullException("info");
+            }
+            info.AddValue("Name", name);
+            info.AddValue("BirthDate", birthDate);
         }
     }
 }

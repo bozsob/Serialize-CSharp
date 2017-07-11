@@ -55,7 +55,7 @@ namespace Serialize_practice
             */
 
             // serialize a Person object
-            Person person = new Person("Tony", new DateTime(1923, 4, 22));
+            Person person = new Person("Trixi", new DateTime(1980, 4, 8));
             Serialize(person);
             Debug.WriteLine("File created.");
 
